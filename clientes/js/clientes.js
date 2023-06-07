@@ -176,6 +176,87 @@ function grabarPrpietario()
      }     
 
 }   
+function grabarPropietarioAsociarBici()
+
+{
+
+     valida = validacionesPropietario();
+
+     if(valida != 0)
+
+     {
+
+         var identi =  document.getElementById("identi").value;
+
+         var nombre =  document.getElementById("nombre").value;
+
+         var telefono =  document.getElementById("telefono").value;
+
+         var direccion =  document.getElementById("direccion").value;
+
+         var observaciones =  document.getElementById("observaciones").value;
+
+         var email =  document.getElementById("email").value;
+
+         const http=new XMLHttpRequest();
+
+         const url = '../clientes/clientesResponsivo.php';
+
+         http.onreadystatechange = function(){
+
+             if(this.readyState == 4 && this.status ==200){
+
+                 console.log(this.responseText);
+
+                 document.getElementById("cuerpoModalClientes").innerHTML = this.responseText;
+
+             }
+
+         };
+
+
+
+         http.open("POST",url);
+
+         http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+         http.send("opcion=grabarPropietarioAsociarBici"
+
+                     + "&identi="+identi
+
+                     + "&nombre="+nombre
+
+                     + "&telefono="+telefono
+
+                     + "&direccion="+direccion
+
+                     + "&observaciones="+observaciones
+
+                     + "&email="+email
+
+             );
+
+
+
+             //aqui debe llamar otra funcion qque busque el ultimo cliente grabado y
+
+             //lo deje seleccionado en el selec de propietario de la captura de datos de la moto
+
+            //  setTimeout(function(){ 
+
+            //  cargarSelectClienteId();
+
+            //  },500);
+
+            //  setTimeout(function(){ 
+
+            //      document.getElementById("marca").focus();
+
+            //  },500);
+
+     }     
+
+}   
 
      
 
@@ -505,3 +586,22 @@ function buscarClientePorNombre()
                 + "&telefono="+telefono
                 );
             }
+
+function preguntarBicicleta(idCliente)
+{
+    // alert('idcliente'+ idCliente); 
+    const http=new XMLHttpRequest();
+    const url = '../bicicletas/bicicletas.php';
+    http.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status ==200){
+            console.log(this.responseText);
+            document.getElementById("cuerpoModalClientes").innerHTML  = this.responseText;
+        }
+    };
+    http.open("POST",url);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send(
+        "opcion=preguntarBicicleta"
+        + "&idCliente="+idCliente
+        );
+}

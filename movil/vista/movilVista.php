@@ -41,7 +41,7 @@ class movilVista{
              <input type="hidden" id="usuario" style="color:black">
             <input type="hidden" id="nivel"  style="color:black">
         <div id="imagenInicial" >
-            <img class="imagenesinicio" src="imagen/logonuevo.png">
+            <img class="imagenesinicio" src="imagen/bicicletas.png">
         </div>
         <p id="slogankaymo">TECNOLOGIA VERDADERA</p>
         <div id="divBotonesPrincipales">
@@ -81,6 +81,7 @@ class movilVista{
     <script src="../ayudas_financieras/js/conceptos.js"></script>
     <script src="../ventas/js/ventas.js"></script>
     <script src="../cambiosdeaceite/js/cambiosdeaceite.js"></script>
+    <script src="../bicicletas/js/bicicletas.js"></script>
     <?php
   }
   public function htmlLogueo(){
@@ -170,14 +171,14 @@ class movilVista{
             if($_SESSION['nivel'] > 2 || $request['nivel']>2)
             {
                 echo     '<br><br>';
-             echo '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaMotos();"><span align="left">MOTOS<span> 
+             echo '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaBicicletas();"><span align="left">BICICLETAS<span> 
                     <i class="fas fa-biking"></i>
                 </button>';
             }    
                 
             echo  '<br><br>';
 
-            echo    '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaOrdenes();">ORDENES 
+            echo    '<button class = "btn btn-primary bontonesmenu"  onclick="pantallaOrdenesBicicletas();">ORDENES 
                     <!-- <i class="fas fa-boxes"></i> -->
                     <i class="fas fa-tools"></i>
                 </button>';

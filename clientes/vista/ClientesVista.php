@@ -372,7 +372,7 @@ class CLientesVista extends vista
 
                 <tr>
 
-                    <td colspan="2"> <button onclick="grabarPrpietario();"class="btn btn-primary btn-block btn-lg" ">GRABAR PROPIETARIO</button></td>
+                    <td colspan="2"> <button onclick="grabarPropietarioAsociarBici();"class="btn btn-primary btn-block btn-lg" ">GRABAR PROPIETARIO</button></td>
 
                 </tr>
 
@@ -461,7 +461,13 @@ class CLientesVista extends vista
         echo '<div class= "avisoGrabado">La informacion del propietario se guardo de forma exitosa</div>';
     }
 
-    public function muestreInfoCliente($infoCLiente,$vehiculos)
+    public function propietarioGrabadoAsociarBici($idCliente){
+        echo '<div class= "avisoGrabado">La informacion del propietario se guardo de forma exitosa</div>';
+        echo '<br>';
+        echo '<button class ="btn btn-primary" onclick="preguntarBicicleta('.$idCliente.');" >Crear Bicicleta</button>';
+    }
+
+    public function muestreInfoCliente($infoCLiente,$bicicletas)
     {
         ?>
         <div  style="color:black;">
@@ -508,10 +514,10 @@ class CLientesVista extends vista
             </div>
 
             <div>
-                <label>VEHICULOS CLIENTE</label>
+                <label>BICICLETAS CLIENTE</label>
                 <div id="divHistorialVehiculos"></div>
                 <div>
-                        <?php $this->mostrarVehiculosCliente($vehiculos);   ?>
+                        <?php $this->mostrarBicicletasCliente($bicicletas);   ?>
                 </div>
             </div>
 
@@ -519,6 +525,53 @@ class CLientesVista extends vista
 
         <?php
     }
+   public function mostrarBicicletasCLiente($bicicletas){
+    echo '<div style="color:black;">';
+        echo '<table class ="table">';
+        foreach($bicicletas as $bicicleta)
+        {
+            $marca = $bicicleta['marca'];
+            // echo '<input type = "hidden" value ="'.$placa.'" id="txtplaca">';
+            echo '<tr>'; 
+            echo '</tr>';
+            echo '<td>';
+            echo '<button 
+                data-toggle="modal" data-target="#myModalClientesHisto"
+                class ="btn btn-success"    
+                onclick="nuevoIngresoBicicleta('.$bicicleta['idBicicleta'].')"> Nuevo Ingreso</button>';
+            echo '</td>';
+            echo '<td>';
+            echo '
+            <button 
+            data-toggle="modal" data-target="#myModalClientesHisto"
+            class ="btn btn-primary"
+            onclick = "muestreHistorialBicicleta(\''.$bicicleta['idBicicleta'].'\');"
+            
+            >';
+            
+            // onclick = "muestreHistorialVehiculo('.$placa.');"
+            //////////////
+            // echo '<td><button  class ="btn btn-default btn-sm" 
+            // data-toggle="modal" data-target="#myModalClientesInfo" 
+            // onclick ="pantallaBusdqueda('.$cli['idcliente'].');"
+            // >';
+            // echo strtoupper($cli['identi']);
+
+            ///////////
+
+
+            echo $marca;
+            echo '</button ></td>';
+
+            
+            echo '<td>'.$bicicleta['color'].'</td>';
+            echo '<td>'.$bicicleta['serial'].'</td>';
+        }
+        
+        echo '</table>';   
+        echo '</div>';    
+        
+   }
 
     public function mostrarVehiculosCliente($vehiculos)
     {

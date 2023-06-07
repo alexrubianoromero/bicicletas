@@ -9,6 +9,7 @@ $raiz = dirname(dirname(dirname(__file__)));
 require_once($raiz.'/clientes/vista/ClientesVista.php');
 require_once($raiz.'/clientes/modelo/ClientesModelo.class.php');
 require_once($raiz.'/vehiculos/modelo/VehiculosModelo.php');
+require_once($raiz.'/bicicletas/modelo/bicicletasModelo.php');
 
 
 
@@ -20,6 +21,7 @@ class ClientesControlador{
 
     private $vista;
     protected $modelCar;
+    protected $biciModel; 
 
 
 
@@ -28,6 +30,7 @@ class ClientesControlador{
         $this->modelo = new ClientesModelo();
         $this->vista = new ClientesVista();
         $this->modelCar = new VehiculosModelo();
+        $this->biciModel = new bicicletasModelo();
         $this->conexion = $conexion;
 
         if(!isset($_REQUEST['opcion'])){
@@ -64,6 +67,9 @@ class ClientesControlador{
                 
                 $this->grabarPropietario($this->conexion,$_REQUEST);
                 
+            }
+            if($_REQUEST['opcion']=='grabarPropietarioAsociarBici'){
+                $this->grabarPropietarioAsociarBici($this->conexion,$_REQUEST);
             }
             
             if($_REQUEST['opcion']=='validarIdenti'){
@@ -125,11 +131,15 @@ class ClientesControlador{
     
     
     public function grabarPropietario($conexion,$request){
-
         $this->modelo->grabarPropietario($conexion,$request);
-        
         $this->vista->propietarioGrabado();
         
+    }
+    
+    public function grabarPropietarioAsociarBici($conexion,$request){
+        $this->modelo->grabarPropietario($conexion,$request);
+        $idCliente = $this->modelo->traerMaxIdCLienteNew();
+        $this->vista->propietarioGrabadoAsociarBici($idCliente);
     }
     
     
@@ -165,17 +175,18 @@ class ClientesControlador{
         
         //voya a hacerla desde clientes haber
         
-        
-        $vehiculos = $this->modelCar->traerVehiculosCliente($request['idCliente']);
+        $bicicletas =  $this->biciModel->traerBicicletasCliente($request['idCliente']);
+        // $vehiculos = $this->modelCar->traerVehiculosCliente($request['idCliente']);
         
         // echo 'veeeehiculos<pre>';
         //             print_r($vehiculos);
         //             echo '</pre>';
         //             die();
-        $this->vista->muestreInfoCliente($infoCLiente,$vehiculos);        
+        $this->vista->muestreInfoCliente($infoCLiente,$bicicletas);        
         
     }
     
+
     function buscarClientePorNombre($request)
     {
         $clientes = $this->modelo->buscarClientePorNombre($request['nombre']);

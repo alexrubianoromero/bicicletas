@@ -115,163 +115,170 @@ class ClientesModelo extends Conexion
               $consultaId = mysql_query($sqlId,$conexion); 
 
               $consultaId = mysql_fetch_assoc($consultaId);
-
+              
               return $consultaId['maxId'];
-
-          } 
-
-          
-
-          public function grabarPropietario($conexion,$request){
-
+              
+            } 
+            
+            
+            
+            public function grabarPropietario($conexion,$request){
+              
               $datosEmpresa = $this->traerEmpresa($conexion);
-
+              
               $existeIdentidad = $this->validarPropietario($conexion,$request['identi']);
-
+              
               $sql = "INSERT INTO cliente0 (identi,nombre,telefono,direccion,observaci,email,id_empresa) 
 
                       VALUES('".$request['identi']."','".strtoupper($request['nombre'])."',
 
-                      '".$request['telefono']."','".$request['direccion']."','".$request['observaciones']."'
+'".$request['telefono']."','".$request['direccion']."','".$request['observaciones']."'
 
-                      ,'".$request['email']."','".$datosEmpresa['id_empresa']."'
+,'".$request['email']."','".$datosEmpresa['id_empresa']."'
 
-                      )";
+)";
 
-            //   echo $sql;
+//   echo $sql;
 
-            //   die();        
+//   die();        
 
-              $consulta = mysql_query($sql,$conexion);   
+$consulta = mysql_query($sql,$conexion);   
 
-              $maxId = $this->traerMaxIdCLiente0($conexion);
+$maxId = $this->traerMaxIdCLiente0($conexion);
 
-              $this->grabar_correo_propietario($conexion,$maxId,$request['email']);
+$this->grabar_correo_propietario($conexion,$maxId,$request['email']);
 
-              return $maxId;   
+return $maxId;   
 
-          }
+}
 
 
 
-          public function grabar_correo_propietario($conexion,$id,$email){
-
+public function grabar_correo_propietario($conexion,$id,$email){
+  
               $sql= "UPDATE cliente0 SET email = '".$email."'
 
-                     WHERE idcliente = '".$id."'  ";
-
+              WHERE idcliente = '".$id."'  ";
+              
               $consulta = mysql_query($sql,$conexion);       
-
-          } 
-
-
-
-          public function traerEmpresa($conexion){
-
+              
+            } 
+            
+            
+            
+            public function traerEmpresa($conexion){
+              
               $sql = "SELECT * FROM  empresa ORDER BY id_empresa DESC ";
-
+              
               $consultaId = mysql_query($sql,$conexion);
-
+              
               $arr = mysql_fetch_assoc($consultaId); 
-
+              
               return $arr;   
-
-          } 
-
-
-
-          public function buscarCliente0Id($conexion='',$id){
-
-            $sql="select * from cliente0 where idcliente = '".$id."'  "; 
-
-            // echo '<br>'.$sql;
-
+              
+            } 
+            
+            
+            
+            public function buscarCliente0Id($conexion='',$id){
+              
+              $sql="select * from cliente0 where idcliente = '".$id."'  "; 
+              
+              // echo '<br>'.$sql;
+              
             // die();
             $consulta = mysql_query($sql,$this->connectMysql()); 
             // $consulta = mysql_query($sql,$conexion); 
-
+            
             $filas = mysql_num_rows($consulta);
-
+            
             $datos = $this->get_table_assoc($consulta);
 
             $respuesta['filas']= $filas;
-
+            
             $respuesta['datos']=  $datos;  
-
+            
             return $respuesta; 
 
-        }
-        
-        public function get_table_assoc($datos)
-        
-        {
-
-		 				$arreglo_assoc='';
-
-             $i=0;	
-             
-             while($row = mysql_fetch_assoc($datos)){		
-               
-               $arreglo_assoc[$i] = $row;
-               
-               $i++;
-               
-							}
+          }
+          
+          public function get_table_assoc($datos)
+          
+          {
+            
+            $arreglo_assoc='';
+            
+            $i=0;	
+            
+            while($row = mysql_fetch_assoc($datos)){		
               
-              return $arreglo_assoc;
+              $arreglo_assoc[$i] = $row;
               
+              $i++;
+              
+            }
+            
+            return $arreglo_assoc;
+            
             }
             
             
             
             
             
-  public function buscarClientePorNombre($nombre){
-      
-      $sql="select * from cliente0 where nombre like '%".$nombre."%'  "; 
+            public function buscarClientePorNombre($nombre){
+              
+              $sql="select * from cliente0 where nombre like '%".$nombre."%'  "; 
               // echo '<br>'.$sql;
               // die();
+              $consulta = mysql_query($sql,$this->connectMysql()); 
+      $filas = mysql_num_rows($consulta);
+      $datos = $this->get_table_assoc($consulta);
+      $respuesta['filas']= $filas;
+      $respuesta['datos']=  $datos;  
+      return $respuesta; 
+    }
+    public function buscarClientePorFiltros($request)
+    {
+      
+      $sql="select * from cliente0 where 1=1  ";
+      
+      if($request['identi'] != '')
+      {
+        $sql .= "  and identi like '%".$request['identi'] ."%'    "; 
+      }
+      
+      if($request['telefono'] != '')
+      {
+        $sql .= "  and telefono like '%".$request['telefono'] ."%'    "; 
+      }
+      
+      // echo '<br>'.$sql;
+      //     die();
       $consulta = mysql_query($sql,$this->connectMysql()); 
       $filas = mysql_num_rows($consulta);
       $datos = $this->get_table_assoc($consulta);
       $respuesta['filas']= $filas;
       $respuesta['datos']=  $datos;  
       return $respuesta; 
-  }
-  public function buscarClientePorFiltros($request)
-  {
-       
-    $sql="select * from cliente0 where 1=1  ";
-    
-    if($request['identi'] != '')
-    {
-        $sql .= "  and identi like '%".$request['identi'] ."%'    "; 
     }
-      
-    if($request['telefono'] != '')
+    public function filtrarPropietariosNombre($nombreCliente)
     {
-      $sql .= "  and telefono like '%".$request['telefono'] ."%'    "; 
-    }
-
-    // echo '<br>'.$sql;
-    //     die();
-    $consulta = mysql_query($sql,$this->connectMysql()); 
-    $filas = mysql_num_rows($consulta);
-    $datos = $this->get_table_assoc($consulta);
-    $respuesta['filas']= $filas;
-    $respuesta['datos']=  $datos;  
-    return $respuesta; 
-  }
-  public function filtrarPropietariosNombre($nombreCliente)
-  {
       $sql = "select * from cliente0 where nombre like '%".$nombreCliente."%'     ";
       // die($sql); 
       $consulta = mysql_query($sql,$this->connectMysql()); 
       $arreglo = $this->get_table_assoc($consulta); 
       return $arreglo;
+    }
+    public function traerMaxIdCLienteNew()
+    {
+      $sql = "select max(idcliente) as maxId  from cliente0 ";
+      $consulta = mysql_query($sql,$this->connectMysql()); 
+      $respu = mysql_fetch_assoc($consulta);
+      return $respu['maxId'];
+    }
+    
+    
   }
-
-
-}
-          
-?>
+  
+  ?>
